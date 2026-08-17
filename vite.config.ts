@@ -1,6 +1,7 @@
 import react from '@vitejs/plugin-react'
 import rsc from '@vitejs/plugin-rsc'
 import tailwindcss from '@tailwindcss/vite'
+import svgr from 'vite-plugin-svgr';
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
 
@@ -21,6 +22,7 @@ export default defineConfig({
     rsc(),
     react(),
     tailwindcss(),
+    svgr(),
   ],
 
   environments: {

@@ -1,5 +1,5 @@
-import * as sch from "@/db/schema";
-import { clsx } from "clsx";
+import type { VodWithCreator } from "./App";
+import CardCreator from "./CardCreator";
 
 function timestampRelative(timestamp: Date): string {
   const ms = new Date().getTime() - timestamp.getTime()
@@ -44,17 +44,16 @@ function substituteThumbnail(thumbnail: string, w: number, h: number): string {
     .replace('{height}', String(h))
 }
 
-type VodWithCreator = sch.Vod & { creator: sch.Creator }
-
 export default function VodCard({ vod }: { vod: VodWithCreator }) {
   const is_live = vod.thumbnail.includes('live_user') // we love jank in this household :3
 
   return (
-    <a
-      href={is_live ? `https://twitch.tv/${vod.creator.name}` : vod.url}
-      className={'flex flex-row gap-4 bg-black/50 p-4 rounded-xl hover:scale-101 transition-transform'}
-    >
-      <div className='relative min-w-[192px] min-h-[108px]'>
+    <div className={'relative flex flex-row gap-4 bg-black/50 p-4 rounded-xl hover:scale-101 transition-transform'}>
+      <a
+        href={is_live ? `https://twitch.tv/${vod.creator.name}` : vod.url}
+        className='absolute w-full h-full top-0 left-0'
+      />
+      <div className='relative min-w-[192px] min-h-[108px] pointer-events-none'>
         <img
           src={substituteThumbnail(vod.thumbnail, 192, 108)}
           alt='Video thumbnail'
@@ -64,16 +63,10 @@ export default function VodCard({ vod }: { vod: VodWithCreator }) {
           <p className='absolute top-2 left-2 px-1 py-0.5 bg-red-500 rounded-sm text-xs font-bold uppercase'>Live</p>
         }
       </div>
-      <div className='flex flex-col justify-between min-w-0'>
+      <div className='flex flex-col justify-between min-w-0 grow'>
         <h3 className='text-nowrap overflow-hidden text-ellipsis'>{vod.title}</h3>
-        <div className='flex flex-row gap-2 items-center'>
-          <img
-            src={`${vod.creator.name}.png`}
-            alt={`${vod.creator.name}'s head`}
-            className='h-[68px] aspect-square [image-rendering:pixelated]'
-          />
+        <div className='flex flex-row justify-between items-center gap-2 w-full'>
           <div>
-            <p className='text-lg'>{vod.creator.name}</p>
             <p
               className='text-neutral-300 leading-4 mt-1'
             >
@@ -86,8 +79,9 @@ export default function VodCard({ vod }: { vod: VodWithCreator }) {
               {timestampRelative(vod.timestamp)}
             </p>
           </div>
+          <CardCreator vod={vod} />
         </div>
       </div>
-    </a>
+    </div>
   )
 }
