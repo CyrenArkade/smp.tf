@@ -12,6 +12,9 @@
     "target": "ESNext",
     "lib": ["ESNext", "DOM"],
     "types": ["vite/client", "@vitejs/plugin-rsc/types"],
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   }
 }

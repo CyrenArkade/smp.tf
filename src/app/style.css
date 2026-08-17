@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@font-face {
+  font-display: swap;
+  font-family: 'Atkinson Hyperlegible Next';
+  font-style: normal;
+  font-weight: 400;
+  src: url('@/app/assets/atkinson-hyperlegible-next-v7-latin-regular.woff2') format('woff2');
+}
+
+@theme {
+  --color-main: #3c315d;
+  --color-light: #9282c3;
+  --color-dark: #282339;
+}
+
+@layer base {
+  * {
+    color: white;
+    font-family: 'Atkinson Hyperlegible Next';
+  }
+
+  h3 {
+    @apply text-lg;
+  }
+}
+
