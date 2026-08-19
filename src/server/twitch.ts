@@ -17,7 +17,7 @@ async function update_creator(creator: sch.Creator) {
     return
 
   const stream = await twitch.streams.getStreamByUserId(creator.twitchId)
-  db.update(sch.creator)
+  await db.update(sch.creator)
     .set({ live: Boolean(stream) })
     .where(eq(sch.creator.id, creator.id))
 

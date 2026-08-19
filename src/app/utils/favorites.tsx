@@ -10,10 +10,10 @@ function defaultFavorites(): Set<string> {
   return new Set()
 }
 
-export const FavoriteContext = createContext({ favorites: new Set(), toggleFavorite: (_: string) => {}})
+export const FavoriteContext = createContext({ favorites: new Set<string>(), toggleFavorite: (_: string) => {}})
 
 export default function FavoritesProvider({ children }: { children: ReactNode }) {
-  const [favorites, setFavorites] = useState<Set<string>>(new Set())
+  const [favorites, setFavorites] = useState(new Set<string>())
 
   useEffect(() => {
     setFavorites(defaultFavorites())

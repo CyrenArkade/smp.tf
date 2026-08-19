@@ -1,8 +1,9 @@
-import type { VodWithCreator } from "./App";
-import CardCreator from "./CardCreator";
+import type { VodWithCreator } from "../App";
+import LiveMarker from "../utils/LiveMarker";
+import VodAttribution from "./VodAttribution";
 
-function timestampRelative(timestamp: Date): string {
-  const ms = new Date().getTime() - timestamp.getTime()
+function timestampRelative(timestamp: Date, duration: number): string {
+  const ms = new Date().getTime() - timestamp.getTime() - duration * 1000
   const min = ms / (60 * 1000)
   const hours = min / 60
   const days = hours / 24
@@ -44,28 +45,24 @@ function substituteThumbnail(thumbnail: string, w: number, h: number): string {
     .replace('{height}', String(h))
 }
 
-export default function VodCard({ vod }: { vod: VodWithCreator }) {
+export default function Vod({ vod, includeAttribution }: { vod: VodWithCreator, includeAttribution?: boolean }) {
   const is_live = vod.thumbnail.includes('live_user') // we love jank in this household :3
 
   return (
-    <div className={'relative flex flex-row gap-4 bg-black/50 p-4 rounded-xl hover:scale-101 transition-transform'}>
+    <div className={'relative flex flex-row gap-2 bg-black/50 p-2 rounded-xl hover:scale-101 transition-transform'}>
       <a
         href={is_live ? `https://twitch.tv/${vod.creator.name}` : vod.url}
-        className='absolute w-full h-full top-0 left-0'
+        className='absolute inset-0'
       />
-      <div className='relative min-w-[192px] min-h-[108px] pointer-events-none'>
-        <img
-          src={substituteThumbnail(vod.thumbnail, 192, 108)}
-          alt='Video thumbnail'
-          className='rounded-md'
-        />
-        {is_live &&
-          <p className='absolute top-2 left-2 px-1 py-0.5 bg-red-500 rounded-sm text-xs font-bold uppercase'>Live</p>
-        }
+      <div
+        className='relative grow-0 bg-contain bg-no-repeat rounded-md min-w-[160px] min-h-[90px] sm:min-w-[224px] sm:min-h-[126px] pointer-events-none'
+        style={{ backgroundImage: `url(${substituteThumbnail(vod.thumbnail, 224, 126)})`}}
+      >
+        <LiveMarker live={is_live} className='absolute top-2 left-2' />
       </div>
-      <div className='flex flex-col justify-between min-w-0 grow'>
-        <h3 className='text-nowrap overflow-hidden text-ellipsis'>{vod.title}</h3>
-        <div className='flex flex-row justify-between items-center gap-2 w-full'>
+      <div className='flex flex-col justify-between min-w-0 grow p-1 sm:p-2'>
+        <h3 className='overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] sm:[-webkit-line-clamp:1] [-webkit-box-orient:vertical] leading-5 sm:leading-normal'>{vod.title}</h3>
+        <div className='flex flex-row justify-between items-end gap-2 w-full'>
           <div>
             <p
               className='text-neutral-300 leading-4 mt-1'
@@ -76,10 +73,12 @@ export default function VodCard({ vod }: { vod: VodWithCreator }) {
               title={timestampIso(vod.timestamp)}
               className='text-neutral-300'
             >
-              {timestampRelative(vod.timestamp)}
+              {timestampRelative(vod.timestamp, vod.duration)}
             </p>
           </div>
-          <CardCreator vod={vod} />
+          {includeAttribution &&
+            <VodAttribution vod={vod} />
+          }
         </div>
       </div>
     </div>
