@@ -7,6 +7,7 @@ import CreatorList from "./creators/CreatorList";
 import VodFilter from "./vods/VodFilter";
 import { parsePathType } from "./utils/routing";
 import { fetchCreators } from "@/db/api";
+import Git from "@/app/assets/git.svg?react";
 
 export type VodWithCreator = sch.Vod & { creator: sch.Creator }
 
@@ -24,19 +25,27 @@ export default async function App({ url }: { url: URL }) {
 
   return (
     <FavoritesProvider>
-      <div className='max-w-5xl mx-auto px-1 py-16'>
-        <img
-          src={flightLogo}
-          alt='The Flight logo'
-          className='max-w-[min(60%,424px)] aspect-1696/616 mx-auto [image-rendering:pixelated]'
-        />
-        <p className='font-ruinic text-3xl sm:text-4xl text-center pt-4 pb-6'>unofficial content tracker</p>
-        <div className='flex flex-col lg:flex-row gap-4'>
-          <div className='flex flex-col-reverse lg:flex-col mx-auto gap-4 px-4 lg:px-0 min-w-72 max-w-md'>
-            <VodFilter url={url.toString()} />
-            <CreatorList creators={allCreators} />
+      <div className='max-w-5xl mx-auto px-1'>
+        <div className='py-16 min-h-screen'>
+          <img
+            src={flightLogo}
+            alt='The Flight logo'
+            className='max-w-[min(60%,424px)] aspect-1696/616 mx-auto [image-rendering:pixelated]'
+          />
+          <p className='font-ruinic text-3xl sm:text-4xl text-center pt-4 pb-6'>unofficial content tracker</p>
+          <div className='flex flex-col lg:flex-row gap-4'>
+            <div className='flex flex-col-reverse lg:flex-col mx-auto gap-4 px-4 lg:px-0 min-w-72 max-w-md'>
+              <VodFilter url={url.toString()} />
+              <CreatorList creators={allCreators} />
+            </div>
+            <VodList creators={creators} flightOnly={flightOnly} />
           </div>
-          <VodList creators={creators} flightOnly={flightOnly} />
+        </div>
+        <div className='flex flex-row items-center justify-between w-full h-12 bg-black/50 mb-8 rounded-full'>
+          <p className='px-6 text-lg'>made with {'<'}3</p>
+          <a className='px-2' href='https://github.com/CyrenArkade/smp.tf'>
+            <Git className='w-8 h-8' />
+          </a>
         </div>
       </div>
       <Client pathname={url.pathname} />
