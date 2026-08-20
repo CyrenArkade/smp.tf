@@ -9,34 +9,41 @@ export default function VodFilter({ url: string_url }: { url: string }) {
   const pathType = parsePathType(url.pathname)
   const { favorites } = useContext(FavoriteContext)
 
-  const favoriteParams = new URLSearchParams()
-  favoriteParams.set('creators', Array.from(favorites).join(','))
-
   return (
-    <div className='flex flex-col p-4 gap-1 rounded-lg bg-black/50'>
-      <h3 className='text-xl text-center'>filter creators</h3>
-      <FilterGroup
-        options={[
-          { label: 'all', href: '/' },
-          { label: 'favorites', href: `/multi?${favoriteParams.toString()}`},
-          {
-            label: 'one',
-            disabled: pathType != 'one',
-            href: url.pathname,
-          },
-        ]}
-        selected={pathType}
-        className='mx-auto'
-      />
-      <h3 className='text-xl text-center pt-4'>filter content</h3>
-      <FilterGroup
-        options={[
-          { label: 'flight', href: '/' },
-          { label: 'all', href: `/multi?${favoriteParams.toString()}`},
-        ]}
-        selected={pathType}
-        className='mx-auto'
-      />
+    <div className='flex flex-row flex-wrap p-4 pt-2 gap-1 lg:gap-3 justify-evenly rounded-lg bg-black/50'>
+      <div>
+        <h3 className='text-xl text-center'>filter creators</h3>
+        <FilterGroup
+          options={[
+            { label: 'all', pathname: '/' },
+            {
+              label: 'favorites',
+              pathname: '/multi',
+              params: { creators: Array.from(favorites).join(',') }
+            },
+          ]}
+          defaultParams={{ creators: undefined }}
+          selected={pathType == 'one' ? undefined : pathType}
+          className='mx-auto'
+        />
+      </div>
+      <div>
+        <h3 className='text-xl text-center'>filter content</h3>
+        <FilterGroup
+          options={[
+            {
+              label: 'flight only',
+              params: { content: undefined },
+            },
+            {
+              label: 'all',
+              params: { content: 'all' },
+            },
+          ]}
+          selected={url.searchParams.has('content') ? 'all' : 'flight only'}
+          className='mx-auto'
+        />
+      </div>
     </div>
   )
 }

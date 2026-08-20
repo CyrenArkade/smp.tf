@@ -1,11 +1,19 @@
 @import "tailwindcss";
 
 @font-face {
-  font-display: swap;
+  font-display: block;
   font-family: 'Atkinson Hyperlegible Next';
   font-style: normal;
   font-weight: 400;
   src: url('@/app/assets/atkinson-hyperlegible-next-v7-latin-regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-display: block;
+  font-family: 'FT Ruinic';
+  font-style: normal;
+  font-weight: 400;
+  src: url('@/app/assets/ft-ruinic.regular.otf') format('opentype');
 }
 
 @theme {
@@ -19,9 +27,9 @@
     color: white;
     font-family: 'Atkinson Hyperlegible Next', 'sans serif';
   }
+}
 
-  h3 {
-    @apply text-lg;
-  }
+@utility font-ruinic {
+  font-family: 'FT Ruinic';
 }
 

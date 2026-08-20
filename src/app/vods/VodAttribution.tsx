@@ -10,7 +10,7 @@ export default function VodAttribution({ vod }: { vod: VodWithCreator }) {
       className='flex flex-row sm:p-1 sm:pl-2 hover:bg-black/50 hover:scale-102 rounded-md gap-2 sm:gap-4 transition-all z-10'
     >
       <div className='self-center flex flex-col items-end'>
-        <p className='text-lg'>{vod.creator.name}</p>
+        <p className='text-md sm:text-lg'>{vod.creator.name}</p>
         <FavoriteButton creator={vod.creator} className='hidden sm:inline' />
       </div>
       <img

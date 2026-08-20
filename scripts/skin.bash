@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 magick $1 \
   -write mpr:skin +delete -filter point \
   \( mpr:skin -crop 8x8+8+8 +repage -resize 128x128 -page +4+4 \) \

@@ -33,7 +33,7 @@ async function update_creator(creator: sch.Creator) {
   for await (const vod of twitch.videos.getVideosByUserPaginated(creator.twitchId)) {
     if (vod.type != 'archive')
       continue
-    if (latest_tracked_vod && latest_tracked_vod.timestamp > vod.creationDate)
+    if (latest_tracked_vod && (latest_tracked_vod.timestamp.getTime() - 24 * 3600 * 1000) > vod.creationDate.getTime())
       break
 
     await db.insert(sch.vod)

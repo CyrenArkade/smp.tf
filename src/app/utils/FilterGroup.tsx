@@ -1,50 +1,59 @@
 'use client'
 import { clsx } from "clsx";
 import { useEffect, useRef, useState } from "react";
+import Link from "./Link";
 
 type FilterGroupProps = {
-  options: { label: string, href: string, disabled?: boolean }[],
-  selected: string,
+  options: {
+    label: string,
+    pathname?: string,
+    params?: Record<string, string | undefined>,
+  }[],
+  defaultParams?: Record<string, string | undefined>,
+  selected: string | undefined,
   className?: string,
 }
-export default function FilterGroup({ options, selected: externalSelected, className }: FilterGroupProps) {
+export default function FilterGroup({ options, selected: externalSelected, className, defaultParams }: FilterGroupProps) {
   const marker = useRef(null)
   const buttons = useRef<(HTMLAnchorElement | null)[]>([])
   const [selected, setSelected] = useState(externalSelected)
+  const [markerStyle, setMarkerStyle] = useState({})
 
   const selectedIndex = options.findIndex(option => option.label == selected)
 
-  const markerStyle = {
-    left: buttons.current[selectedIndex]?.offsetLeft,
-    width: buttons.current[selectedIndex]?.clientWidth,
-  }
+  useEffect(() => {
+    if (selectedIndex == -1)
+      setMarkerStyle({ ...markerStyle, backgroundColor: 'transparent' })
+    else
+      setMarkerStyle({
+        ...markerStyle,
+        left: buttons.current[selectedIndex]?.offsetLeft,
+        width: buttons.current[selectedIndex]?.clientWidth,
+        backgroundColor: undefined,
+      })
+  }, [selectedIndex])
 
   useEffect(() => {
     setSelected(externalSelected)
   }, [externalSelected])
 
   return (
-    <div className={clsx('relative flex flex-row bg-white/10 z-10 rounded-full w-fit', className)}>
+    <div className={clsx('relative flex flex-row bg-white/10 z-10 rounded-full w-fit overflow-clip', className)}>
       <span ref={marker} className='absolute -z-10 rounded-full top-0 h-full bg-light transition-all ease-in-out duration-200' style={markerStyle} />
       {options.map((option, i) => {
-        return <a
+        return <Link
           key={i}
           ref={e => { buttons.current[i] = e }}
-          href={option.href}
-          className={clsx(
-            'block rounded-full px-4 py-1 hover:scale-105 transition-all',
-            option.disabled && 'cursor-default',
-          )}
-          aria-disabled={option.disabled}
-          onClick={e => {
-            if (option.disabled)
-              e.preventDefault()
-            else
-              setSelected(option.label)
+          pathname={option.pathname}
+          params={{
+            ...defaultParams,
+            ...option.params,
           }}
+          className={'block rounded-full py-1 transition-all px-3 hover:scale-105'}
+          onClick={() => setSelected(option.label)}
         >
           {option.label}
-        </a>
+        </Link>
       })}
     </div>
   )

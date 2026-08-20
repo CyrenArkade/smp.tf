@@ -7,3 +7,4 @@ export function parsePathType(pathname: string): string {
       : 'one'
   )
 }
+

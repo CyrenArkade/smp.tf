@@ -61,8 +61,8 @@ export default function Vod({ vod, includeAttribution }: { vod: VodWithCreator, 
         <LiveMarker live={is_live} className='absolute top-2 left-2' />
       </div>
       <div className='flex flex-col justify-between min-w-0 grow p-1 sm:p-2'>
-        <h3 className='overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] sm:[-webkit-line-clamp:1] [-webkit-box-orient:vertical] leading-5 sm:leading-normal'>{vod.title}</h3>
-        <div className='flex flex-row justify-between items-end gap-2 w-full'>
+        <h3 className='text-md sm:text-lg overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] sm:[-webkit-line-clamp:1] [-webkit-box-orient:vertical] leading-5 sm:leading-normal'>{vod.title}</h3>
+        <div className='flex flex-row justify-between items-end gap-2 w-full text-sm sm:text-lg'>
           <div>
             <p
               className='text-neutral-300 leading-4 mt-1'
