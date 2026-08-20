@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 import svgr from 'vite-plugin-svgr';
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
+import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
   resolve: {
@@ -19,39 +20,22 @@ export default defineConfig({
   },
 
   plugins: [
-    rsc(),
+    rsc({
+      entries: {
+        rsc: './src/app/framework/entry.rsc.tsx',
+        ssr: './src/app/framework/entry.ssr.tsx',
+        client: './src/app/framework/entry.browser.tsx',
+      },
+    }),
     react(),
     tailwindcss(),
     svgr(),
+    visualizer({
+      filename: "./dist/stats.html",
+      template: "treemap",
+      gzipSize: true,
+      brotliSize: true,
+      open: false,
+    })
   ],
-
-  environments: {
-    rsc: {
-      build: {
-        rollupOptions: {
-          input: {
-            index: './src/app/framework/entry.rsc.tsx',
-          },
-        },
-      },
-    },
-    ssr: {
-      build: {
-        rollupOptions: {
-          input: {
-            index: './src/app/framework/entry.ssr.tsx',
-          },
-        },
-      },
-    },
-    client: {
-      build: {
-        rollupOptions: {
-          input: {
-            index: './src/app/framework/entry.browser.tsx',
-          },
-        },
-      },
-    },
-  },
 })

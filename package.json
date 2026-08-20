@@ -29,6 +29,7 @@
     "@vitejs/plugin-react": "latest",
     "@vitejs/plugin-rsc": "latest",
     "drizzle-kit": "^1.0.0-rc.4",
+    "rollup-plugin-visualizer": "^7.1.1",
     "rsc-html-stream": "^0.0.8",
     "vite": "^8.2.1",
     "vite-plugin-svgr": "^5.2.0"
