@@ -1,13 +1,11 @@
 server {
-  listen 80;
-  server_name 159.203.187.117;
-  root /var/www/smp.tf/dist/client;
+  listen 80 default_server;
+  server_name _;
+  root /var/www/smp.tf;
 
   location / {
-    try_files $uri $uri/ @bun;
-
+    try_files $uri @bun;
     access_log off;
-    add_header Cache-Control "public, immutable";
   }
 
   location @bun {
