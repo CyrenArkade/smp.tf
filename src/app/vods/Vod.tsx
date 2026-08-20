@@ -63,7 +63,7 @@ export default function Vod({ vod, i }: { vod: VodWithCreator, i: number }) {
         visible ? 'opacity-100' : 'opacity-0 translate-x-3'
       )}
       style={{
-        transition: `scale 150ms, opacity 300ms ${Math.floor(Math.log(i+1)) * 150}ms linear, translate 300ms ${Math.floor(Math.log(i+1)) * 150}ms`
+        transition: `scale 150ms, opacity 300ms ${Math.floor(Math.log(i+1) * 150)}ms linear, translate 300ms ${Math.floor(Math.log(i+1) * 150)}ms`
       }}
     >
       <a

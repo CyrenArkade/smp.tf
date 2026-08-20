@@ -51,7 +51,11 @@ export default function CreatorList({ creators }: { creators: Creator[] }) {
         />
         <Search
           className='absolute h-full w-8 top-0 left-0 p-1 cursor-pointer transition-all not-group-focus-within:hover:bg-white/20 rounded-full'
-          onPointerDown={e => {
+          onMouseDown={e => {
+            e.preventDefault()
+            searchRef.current?.focus()
+          }}
+          onTouchStart={e => {
             e.preventDefault()
             searchRef.current?.focus()
           }}
