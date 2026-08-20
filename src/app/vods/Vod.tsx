@@ -1,6 +1,9 @@
+'use client'
+import { useEffect, useState } from "react";
 import type { VodWithCreator } from "../App";
 import LiveMarker from "../utils/LiveMarker";
 import VodAttribution from "./VodAttribution";
+import { clsx } from "clsx";
 
 function timestampRelative(timestamp: Date, duration: number): string {
   const ms = new Date().getTime() - timestamp.getTime() - duration * 1000
@@ -45,20 +48,33 @@ function substituteThumbnail(thumbnail: string, w: number, h: number): string {
     .replace('{height}', String(h))
 }
 
-export default function Vod({ vod, includeAttribution }: { vod: VodWithCreator, includeAttribution?: boolean }) {
-  const is_live = vod.thumbnail.includes('live_user') // we love jank in this household :3
+export default function Vod({ vod, i }: { vod: VodWithCreator, i: number }) {
+  const isLive = vod.thumbnail.includes('live_user') // we love jank in this household :3
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    setVisible(true)
+  }, [])
 
   return (
-    <div className={'relative flex flex-row gap-2 bg-black/50 p-2 rounded-xl hover:scale-101 transition-transform'}>
+    <div
+      className={clsx(
+        'relative flex flex-row gap-2 bg-black/50 p-2 rounded-xl hover:scale-101',
+        visible ? 'opacity-100' : 'opacity-0 translate-x-3'
+      )}
+      style={{
+        transition: `scale 150ms, opacity 300ms ${Math.floor(Math.log(i+1)) * 150}ms linear, translate 300ms ${Math.floor(Math.log(i+1)) * 150}ms`
+      }}
+    >
       <a
-        href={is_live ? `https://twitch.tv/${vod.creator.name}` : vod.url}
+        href={isLive ? `https://twitch.tv/${vod.creator.name}` : vod.url}
         className='absolute inset-0'
       />
       <div
         className='relative grow-0 bg-contain bg-no-repeat rounded-md min-w-[160px] min-h-[90px] sm:min-w-[224px] sm:min-h-[126px] pointer-events-none'
         style={{ backgroundImage: `url(${substituteThumbnail(vod.thumbnail, 224, 126)})`}}
       >
-        <LiveMarker live={is_live} className='absolute top-2 left-2' />
+        <LiveMarker live={isLive} className='absolute top-2 left-2' />
       </div>
       <div className='flex flex-col justify-between min-w-0 grow p-1 sm:p-2'>
         <h3 className='text-md sm:text-lg overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] sm:[-webkit-line-clamp:1] [-webkit-box-orient:vertical] leading-5 sm:leading-normal'>{vod.title}</h3>
@@ -76,9 +92,7 @@ export default function Vod({ vod, includeAttribution }: { vod: VodWithCreator, 
               {timestampRelative(vod.timestamp, vod.duration)}
             </p>
           </div>
-          {includeAttribution &&
-            <VodAttribution vod={vod} />
-          }
+          <VodAttribution vod={vod} />
         </div>
       </div>
     </div>

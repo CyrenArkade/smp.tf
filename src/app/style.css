@@ -13,7 +13,7 @@
   font-family: 'FT Ruinic';
   font-style: normal;
   font-weight: 400;
-  src: url('@/app/assets/ft-ruinic.regular.otf') format('opentype');
+  src: url('@/app/assets/ft-ruinic.regular.woff2') format('woff2');
 }
 
 @theme {

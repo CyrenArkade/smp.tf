@@ -10,7 +10,7 @@ export default function VodFilter({ url: string_url }: { url: string }) {
   const { favorites } = useContext(FavoriteContext)
 
   return (
-    <div className='flex flex-row flex-wrap p-4 pt-2 gap-1 lg:gap-3 justify-evenly rounded-lg bg-black/50'>
+    <div className='flex flex-row flex-wrap p-4 pt-2 gap-3 justify-evenly rounded-lg bg-black/50'>
       <div>
         <h3 className='text-xl text-center'>filter creators</h3>
         <FilterGroup

@@ -15,7 +15,7 @@ export function Root({ url }: { url: URL }) {
         <meta name="apple-mobile-web-app-title" content="smp.tf" />
         <link rel="manifest" href="/favicon/site.webmanifest" />
 
-        <title>smp.theflight</title>
+        <title>smp.tf</title>
       </head>
       <body style={{ backgroundColor: "#3c315d" }}>
         <App url={url} />

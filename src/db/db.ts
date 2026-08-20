@@ -6,6 +6,7 @@ import type { CockroachTable } from "drizzle-orm/cockroach-core";
 import type { SQLiteTable } from "drizzle-orm/sqlite-core";
 
 const db = drizzle(process.env.DB_PATH!, { relations });
+db.run(sql`PRAGMA busy_timeout = 10000;`)
 export default db
 
 // from drizzle upsert docs

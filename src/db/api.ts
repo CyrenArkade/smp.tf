@@ -17,7 +17,7 @@ export async function fetchVods(filter?: VodFilter) {
       creator: !filter?.creators ? undefined : { name: { in: filter.creators } },
       flight: filter?.flight,
     },
-    limit: 100,
+    limit: 50,
   })
 }
 

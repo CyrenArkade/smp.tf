@@ -12,7 +12,6 @@ export const twitch = new ApiClient({
 })
 
 async function update_creator(creator: sch.Creator) {
-  console.log('updating', creator.name)
   if (!creator.twitchId)
     return
 
@@ -57,7 +56,11 @@ async function update_creator(creator: sch.Creator) {
   }
 }
 
+let lastUpdate = new Date()
 export async function update_twitch() {
+  console.log(`${new Date}: (${((new Date().getTime() - lastUpdate.getTime()) / 1000).toFixed(2)}s)`)
+  lastUpdate = new Date()
+
   const creators = await db.select().from(sch.creator);
   for (const creator of creators)
     await update_creator(creator);
