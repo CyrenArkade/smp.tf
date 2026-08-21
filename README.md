@@ -2,7 +2,7 @@
   <img alt="Project logo" src="src/app/assets/flight-logo.png" width="300">
 </p>
 
-# smp.tf
+# [smp.tf](https://smp.tf)
 Content tracker for The Flight SMP.  
 Because there are too damn many good PoVs :3
 
