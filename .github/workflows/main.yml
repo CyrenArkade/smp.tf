@@ -6,8 +6,9 @@ on:
       - main
 
 jobs:
-  build:
+  build-deploy:
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
       - name: Checkout repository
@@ -21,13 +22,7 @@ jobs:
 
       - name: Build
         run: bun run build
-          
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment: production
 
-    steps:
       - name: Deploy over SSH
         uses: easingthemes/ssh-deploy@v5.1.0
         with:
