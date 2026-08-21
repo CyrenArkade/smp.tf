@@ -1,5 +1,6 @@
 import { fetchVods } from "@/db/api";
 import Vod from "./Vod";
+import ListTitle from "./ListTitle";
 
 export default async function VodList({ creators, flightOnly }: { creators: 'all' | string[], flightOnly: boolean }) {
   const vods = await fetchVods({
@@ -9,6 +10,7 @@ export default async function VodList({ creators, flightOnly }: { creators: 'all
 
   return (
     <div className='w-full space-y-2 sm:space-y-2'>
+      <ListTitle creators={creators} />
       {vods.length == 0
         ? <div className='w-full bg-black/50 rounded-xl py-8 space-y-4'>
           <h3 className='text-center text-3xl'>there's nothing here</h3>
