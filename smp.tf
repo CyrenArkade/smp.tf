@@ -1,7 +1,7 @@
 server {
   listen 80 default_server;
   server_name _;
-  root /var/www/smp.tf;
+  root /srv/smp.tf/dist/client;
 
   location / {
     try_files $uri @bun;
