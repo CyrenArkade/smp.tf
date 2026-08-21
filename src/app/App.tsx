@@ -48,7 +48,7 @@ export default async function App({ url }: { url: URL }) {
           </a>
         </div>
       </div>
-      <Client pathname={url.pathname} />
+      <Client />
     </FavoritesProvider>
   )
 }
