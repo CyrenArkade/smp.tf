@@ -1,5 +1,5 @@
 import * as sch from "@/db/schema";
-import FavoritesProvider from "./utils/favorites";
+import FavoritesProvider from "./utils/Favorites";
 import VodList from "./vods/VodList";
 import Client from "./Client";
 import flightLogo from "@/app/assets/flight-logo.png";

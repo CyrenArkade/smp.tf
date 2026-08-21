@@ -1,6 +1,6 @@
 'use client'
 import { useContext } from "react";
-import { FavoriteContext } from "../utils/favorites";
+import { FavoriteContext } from "../utils/Favorites";
 import FilterGroup from "../utils/FilterGroup";
 import { parsePathType } from "../utils/routing";
 
