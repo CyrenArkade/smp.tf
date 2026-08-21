@@ -43,8 +43,8 @@ export default async function App({ url }: { url: URL }) {
         </div>
         <div className='flex flex-row items-center justify-between w-full h-12 bg-black/50 mb-8 rounded-full'>
           <p className='px-6 text-lg'>made with {'<'}3</p>
-          <a className='px-2' href='https://github.com/CyrenArkade/smp.tf'>
-            <Git className='w-8 h-8' />
+          <a className='px-3' href='https://github.com/CyrenArkade/smp.tf'>
+            <Git className='w-6 h-6' />
           </a>
         </div>
       </div>
