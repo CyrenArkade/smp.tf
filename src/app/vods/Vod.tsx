@@ -56,6 +56,8 @@ export default function Vod({ vod, i }: { vod: VodWithCreator, i: number }) {
     setVisible(true)
   }, [])
 
+  const vodLink = isLive ? `https://twitch.tv/${vod.creator.name}` : vod.url
+
   return (
     <div
       className={clsx(
@@ -67,7 +69,7 @@ export default function Vod({ vod, i }: { vod: VodWithCreator, i: number }) {
       }}
     >
       <a
-        href={isLive ? `https://twitch.tv/${vod.creator.name}` : vod.url}
+        href={vodLink}
         className='absolute inset-0'
       />
       <div
@@ -77,9 +79,18 @@ export default function Vod({ vod, i }: { vod: VodWithCreator, i: number }) {
         <LiveMarker live={isLive} className='absolute top-2 left-2' />
       </div>
       <div className='flex flex-col justify-between min-w-0 grow p-1 sm:p-2'>
-        <h3 className='text-md sm:text-lg overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] sm:[-webkit-line-clamp:1] [-webkit-box-orient:vertical] leading-5 sm:leading-normal'>{vod.title}</h3>
+        <h3
+          onClick={() => window.location.href = vodLink}
+          title={vod.title}
+          className={clsx(
+            'cursor-pointer z-10 text-md sm:text-lg overflow-hidden leading-5 sm:leading-normal',
+            '[display:-webkit-box] [-webkit-line-clamp:2] sm:[-webkit-line-clamp:1] [-webkit-box-orient:vertical]',
+          )}
+        >
+          {vod.title}
+        </h3>
         <div className='flex flex-row justify-between items-end gap-2 w-full text-sm sm:text-lg'>
-          <div>
+          <div className='cursor-pointer z-10' onClick={() => window.location.href = vodLink}>
             <p
               className='text-neutral-300 leading-4 mt-1'
             >
