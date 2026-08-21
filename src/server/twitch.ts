@@ -57,7 +57,7 @@ async function update_creator(creator: sch.Creator) {
 }
 
 let lastUpdate = new Date()
-export async function update_twitch() {
+export async function updateTwitch() {
   console.log(`${new Date}: (${((new Date().getTime() - lastUpdate.getTime()) / 1000).toFixed(2)}s)`)
   lastUpdate = new Date()
 
