@@ -26,7 +26,7 @@ export default async function App({ url }: { url: URL }) {
   return (
     <FavoritesProvider>
       <div className='max-w-5xl mx-auto px-1'>
-        <div className='py-16 min-h-screen'>
+        <div className='pb-16 pt-[min(4rem,10%)] min-h-screen'>
           <img
             src={flightLogo}
             alt='The Flight logo'
