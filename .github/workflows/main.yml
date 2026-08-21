@@ -1,16 +1,14 @@
-name: Build
+name: Build & Deploy
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  build:
+  build-deploy:
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
       - name: Checkout repository
@@ -25,8 +23,17 @@ jobs:
       - name: Build
         run: bun run build
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v7.0.1
+      - name: Deploy over SSH
+        uses: easingthemes/ssh-deploy@v5.1.0
         with:
-          name: app-build
-          path: dist
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-rlgoDzvc -i --delete"
+          SOURCE: "."
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: "/srv/smp.tf"
+          EXCLUDE: "/.git/, /node_modules/"
+          SCRIPT_BEFORE: ls -al
+          SCRIPT_AFTER: |
+            echo $RSYNC_STDOUT
+            ls -al
