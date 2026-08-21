@@ -37,3 +37,6 @@ jobs:
           SCRIPT_AFTER: |
             echo $RSYNC_STDOUT
             ls -al
+            pwd
+            whoami
+            hostname
