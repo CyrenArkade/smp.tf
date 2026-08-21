@@ -1,40 +1,40 @@
-# Vite + RSC
+<p align="center">
+  <img alt="Project logo" src="src/app/assets/flight-logo.png" width="300">
+</p>
 
-This example shows how to set up a React application with [Server Component](https://react.dev/reference/rsc/server-components) features on Vite using [`@vitejs/plugin-rsc`](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-rsc).
+# smp.tf
+Content tracker for The Flight SMP.  
+Because there are too damn many good PoVs :3
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/vitejs/vite-plugin-react/tree/main/packages/plugin-rsc/examples/starter)
+### what it do?
+* Pulls streams and VoDs from Twitch and displays a feed
+* Filter by creator
+* Filter out non-Flight streams and VoDs
+  * Checks if they ever have had "flight" in their titles.
+  * Unfortunately there is no better way :(
+* Favorite creators and see a feed of only them
 
-```sh
-# run dev server
-npm run dev
+### development
 
-# build for production and preview
-npm run build
-npm run preview
+#### .env
+```.env
+DB_PATH=path_to_sqlite_db (ex. db.sqlite)
+
+# smp.tf uses Twitch's app tokens for authentication
+TWITCH_CLIENT_ID=your_twitch_id
+TWITCH_CLIENT_SECRET=your_twitch_secret
 ```
 
-## API usage
+#### setup
+```bash
+# to seed the database with all creators
+bun run seed
 
-See [`@vitejs/plugin-rsc`](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-rsc) for the documentation.
+# in the background, run the server
+# it simply periodically fetches info from twitch
+# can run once then kill if you cba backgrounding
+bun run server
 
-- [`vite.config.ts`](./vite.config.ts)
-  - `@vitejs/plugin-rsc/plugin`
-- [`./src/framework/entry.rsc.tsx`](./src/framework/entry.rsc.tsx)
-  - `@vitejs/plugin-rsc/rsc/server`
-  - `import.meta.viteRsc.loadModule`
-- [`./src/framework/entry.ssr.tsx`](./src/framework/entry.ssr.tsx)
-  - `@vitejs/plugin-rsc/ssr`
-  - `getClientEntryUrl`
-  - `rsc-html-stream/server`
-- [`./src/framework/entry.browser.tsx`](./src/framework/entry.browser.tsx)
-  - `@vitejs/plugin-rsc/browser`
-  - `rsc-html-stream/client`
-
-## Notes
-
-- [`./src/framework/entry.{browser,rsc,ssr}.tsx`](./src/framework) (with inline comments) provides an overview of how low level RSC (React flight) API can be used to build RSC framework.
-- You can use [`vite-plugin-inspect`](https://github.com/antfu-collective/vite-plugin-inspect) to understand how `"use client"` and `"use server"` directives are transformed internally.
-
-## Deployment
-
-See [vite-plugin-rsc-deploy-example](https://github.com/hi-ogawa/vite-plugin-rsc-deploy-example)
+# start the webserver
+bun run dev
+```
