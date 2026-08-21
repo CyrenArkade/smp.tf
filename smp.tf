@@ -1,19 +1,29 @@
 server {
   listen 80 default_server;
   server_name _;
+  
+  return 301 https://$host$request_uri;
+} 
+    
+server {
+  listen 443 ssl;
+  server_name _;
   root /srv/smp.tf/dist/client;
 
-  location / {
+  ssl_certificate /etc/letsencrypt/live/smp.tf/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/smp.tf/privkey.pem;
+
+  location /
     try_files $uri @bun;
     access_log off;
   }
-
+ 
   location @bun {
     proxy_pass http://127.0.0.1:3000;
+  
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
   }
 }
-
