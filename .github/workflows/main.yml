@@ -33,10 +33,7 @@ jobs:
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: "/srv/smp.tf"
           EXCLUDE: "/.git/, /node_modules/"
-          SCRIPT_BEFORE: ls -al
+          SCRIPT_BEFORE: systemctl stop smp.tf.service
           SCRIPT_AFTER: |
             echo $RSYNC_STDOUT
-            ls -al
-            pwd
-            whoami
-            hostname
+            systemctl start smp.tf.service
