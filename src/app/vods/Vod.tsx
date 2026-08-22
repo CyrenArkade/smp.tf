@@ -90,17 +90,16 @@ export default function Vod({ vod, i }: { vod: VodWithCreator, i: number }) {
           {vod.title}
         </h3>
         <div className='flex flex-row justify-between items-end gap-2 w-full text-sm sm:text-lg'>
-          <div className='cursor-pointer z-10' onClick={() => window.location.href = vodLink}>
-            <p
-              className='text-neutral-300 leading-4 mt-1'
-            >
+          <div
+            className='cursor-pointer z-10'
+            onClick={() => window.location.href = vodLink}
+            title={timestampIso(vod.timestamp)}
+          >
+            <p className='text-neutral-300 leading-4 mt-1'>
               {formatDuration(vod.duration)}
             </p>
-            <p
-              title={timestampIso(vod.timestamp)}
-              className='text-neutral-300'
-            >
-              {timestampRelative(vod.timestamp, vod.duration)}
+            <p className='text-neutral-300'>
+              {isLive ? 'now!' : timestampRelative(vod.timestamp, vod.duration)}
             </p>
           </div>
           <VodAttribution vod={vod} />
