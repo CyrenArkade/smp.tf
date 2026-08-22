@@ -79,20 +79,20 @@ export default function Vod({ vod, i }: { vod: VodWithCreator, i: number }) {
         <LiveMarker live={isLive} className='absolute top-2 left-2' />
       </div>
       <div className='flex flex-col justify-between min-w-0 grow p-1 sm:p-2'>
-        <h3
-          onClick={() => window.location.href = vodLink}
-          title={vod.title}
-          className={clsx(
-            'cursor-pointer z-10 text-md sm:text-lg overflow-hidden leading-5 sm:leading-normal',
-            '[display:-webkit-box] [-webkit-line-clamp:2] sm:[-webkit-line-clamp:1] [-webkit-box-orient:vertical]',
-          )}
-        >
-          {vod.title}
-        </h3>
+        <a href={vodLink} title={vod.title} className='z-10'>
+          <h3
+            className={clsx(
+              'cursor-pointer text-md sm:text-lg overflow-hidden leading-5 sm:leading-normal',
+              '[display:-webkit-box] [-webkit-line-clamp:2] sm:[-webkit-line-clamp:1] [-webkit-box-orient:vertical]',
+            )}
+          >
+            {vod.title}
+          </h3>
+        </a>
         <div className='flex flex-row justify-between items-end gap-2 w-full text-sm sm:text-lg'>
-          <div
+          <a
             className='cursor-pointer z-10'
-            onClick={() => window.location.href = vodLink}
+            href={vodLink}
             title={timestampIso(vod.timestamp)}
           >
             <p className='text-neutral-300 leading-4 mt-1'>
@@ -101,7 +101,7 @@ export default function Vod({ vod, i }: { vod: VodWithCreator, i: number }) {
             <p className='text-neutral-300'>
               {isLive ? 'now!' : timestampRelative(vod.timestamp, vod.duration)}
             </p>
-          </div>
+          </a>
           <VodAttribution vod={vod} />
         </div>
       </div>
