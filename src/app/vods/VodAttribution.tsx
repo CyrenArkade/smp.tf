@@ -16,7 +16,7 @@ export default function VodAttribution({ vod }: { vod: VodWithCreator }) {
       <img
         src={`skins/${vod.creator.name}.png`}
         alt={`${vod.creator.name}'s head`}
-        className='h-[34px] sm:h-[68px] aspect-square [image-rendering:pixelated]'
+        className='h-[36px] sm:h-[72px] aspect-square [image-rendering:pixelated]'
       />
     </a>
   )

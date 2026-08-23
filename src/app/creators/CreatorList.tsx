@@ -72,7 +72,7 @@ export default function CreatorList({ creators }: { creators: Creator[] }) {
           <img
             src={`skins/${creator.name}.png`}
             alt={`${creator.name}'s head`}
-            className='w-[34px] [image-rendering:pixelated]'
+            className='w-[36px] [image-rendering:pixelated]'
           />
           <p className='mr-auto'>{creator.name}</p>
           <LiveMarker live={creator.live} />
