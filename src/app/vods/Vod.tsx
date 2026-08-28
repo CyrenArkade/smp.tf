@@ -79,7 +79,12 @@ export default function Vod({ vod, i }: { vod: VodWithCreator, i: number }) {
         <LiveMarker live={isLive} className='absolute top-2 left-2' />
       </div>
       <div className='flex flex-col justify-between min-w-0 grow p-1 sm:p-2'>
-        <a href={vodLink} title={vod.title} className='z-10'>
+        <a
+          href={vodLink}
+          title={vod.title}
+          className='z-10'
+          tabIndex={-1}
+        >
           <h3
             className={clsx(
               'cursor-pointer text-md sm:text-lg overflow-hidden leading-5 sm:leading-normal',
@@ -94,6 +99,7 @@ export default function Vod({ vod, i }: { vod: VodWithCreator, i: number }) {
             className='cursor-pointer z-10'
             href={vodLink}
             title={timestampIso(vod.timestamp)}
+            tabIndex={-1}
           >
             <p className='text-neutral-300 leading-4 mt-1'>
               {formatDuration(vod.duration)}
