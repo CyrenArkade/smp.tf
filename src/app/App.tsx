@@ -25,6 +25,13 @@ export default async function App({ url }: { url: URL }) {
 
   return (
     <FavoritesProvider>
+      <a
+        href='https://theflightsmp.store/'
+        target='_blank'
+        className='flex items-center justify-center w-full h-12 text-2xl bg-[#9454ee] underline'
+      >
+        <h1>GET YOUR JIBBLE HERE</h1>
+      </a>
       <div className='max-w-5xl mx-auto px-1'>
         <div className='pb-16 pt-[min(4rem,10%)] min-h-screen'>
           <img
