@@ -3,7 +3,7 @@ import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const creator = sqliteTable('creator', {
   id: int().primaryKey({ autoIncrement: true }),
-  name: text().notNull(),
+  name: text().notNull().unique(),
   twitchId: text(),
   live: int({ mode: 'boolean' }).notNull(),
 })

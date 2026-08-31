@@ -1,8 +1,20 @@
 import { $ } from "bun";
 import * as sch from "@/db/schema";
+import { parseArgs } from "util";
 
-await $`rm -f db.sqlite`
-await $`bunx drizzle-kit push`
+const { values } = parseArgs({
+  args: Bun.argv,
+  options: {
+    reset: { type: 'boolean' },
+  },
+  strict: true,
+  allowPositionals: true,
+})
+
+if (values.reset) {
+  await $`rm -f db.sqlite`
+  await $`bunx drizzle-kit push`
+}
 
 // import after reset
 const { default: db } = await import("@/db/db");
@@ -42,7 +54,9 @@ const creators = [
   {name: "CaptainSparklez", twitchName: "captainsparklez"},
   {name: "KaraCorvus", twitchName: "karacorvus"},
   {name: "PrinceZam", twitchName: "princezam"},
-  {name: "Ghostiefruit", twitchName: "ghostiefruit"}
+  {name: "Ghostiefruit", twitchName: "ghostiefruit"},
+  {name: "acho", twitchName: "acho"},
+  {name: "raerevord", twitchName: "raerevord"},
 ]
 
 for (const creator of creators) {
@@ -56,5 +70,6 @@ for (const creator of creators) {
       twitchId: user.id,
       live: false,
     })
+    .onConflictDoNothing()
 }
 
