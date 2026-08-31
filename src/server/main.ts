@@ -3,7 +3,6 @@ import rscEntry from "@/../dist/rsc/index.js";
 import { updateTwitch } from "./twitch";
 
 setInterval(updateTwitch, 60 * 1000)
-await updateTwitch()
 
 if (process.env.NODE_ENV == 'production') {
   const server = Bun.serve({
@@ -12,4 +11,6 @@ if (process.env.NODE_ENV == 'production') {
   })
   console.log('Listening on port', server.port)
 }
+
+await updateTwitch()
 
