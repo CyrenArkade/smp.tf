@@ -6,14 +6,16 @@ import flightLogo from "@/app/assets/flight-logo.png";
 import CreatorList from "./creators/CreatorList";
 import VodFilter from "./vods/VodFilter";
 import { parsePathType } from "./utils/routing";
-import { fetchCreators } from "@/db/api";
+import { fetchCreators, fetchVods } from "@/db/api";
 import Git from "@/app/assets/git.svg?react";
+import ListTitle from "./vods/ListTitle";
 
 export type VodWithCreator = sch.Vod & { creator: sch.Creator }
 
 export default async function App({ url }: { url: URL }) {
+  // parse URL
   const pathType = parsePathType(url.pathname)
-  const creators =
+  const urlCreators =
     pathType === 'all'
       ? 'all'
     : pathType === 'favorites'
@@ -21,7 +23,12 @@ export default async function App({ url }: { url: URL }) {
     : [url.pathname.slice(1)]
   const flightOnly = url.searchParams.get('content') != 'all'
 
+  // do fetches
   const allCreators = await fetchCreators()
+  const vods = await fetchVods({
+    creators: urlCreators === 'all' ? undefined : urlCreators,
+    flight: flightOnly ? true : undefined,
+  })
 
   return (
     <FavoritesProvider>
@@ -45,7 +52,8 @@ export default async function App({ url }: { url: URL }) {
               <VodFilter url={url.toString()} />
               <CreatorList creators={allCreators} />
             </div>
-            <VodList creators={creators} flightOnly={flightOnly} />
+            <ListTitle creators={urlCreators} />
+            <VodList vods={vods} key={'' + urlCreators + flightOnly} />
           </div>
         </div>
         <div className='flex flex-row items-center justify-between w-full h-12 bg-black/50 mb-8 rounded-full'>
