@@ -1,5 +1,5 @@
 'use client'
-import Vod from "./Vod";
+import Vod, { vodLink } from "./Vod";
 import type { VodWithCreator } from "../App";
 import { useEffect, useState } from "react";
 
@@ -16,7 +16,7 @@ export default function VodList({ vods }: { vods: VodWithCreator[] }) {
         direction = 1
         else if (e.key == 'k' || e.key == 'ArrowUp')
           direction = -1
-          else
+        else
           return
 
       setFocusIndex(focusIndex => Math.min(Math.max(0, (focusIndex ?? -direction) + direction), vods.length-1))
@@ -29,7 +29,7 @@ export default function VodList({ vods }: { vods: VodWithCreator[] }) {
   useEffect(() => {
     if (focusIndex == undefined)
       return
-    (document.querySelector(`a[href="${vods[focusIndex].url}"]`) as HTMLElement).focus()
+    (document.querySelector(`a[href="${vodLink(vods[focusIndex])}"]`) as HTMLElement).focus()
   }, [focusIndex])
 
   return (

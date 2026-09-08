@@ -48,15 +48,23 @@ function substituteThumbnail(thumbnail: string, w: number, h: number): string {
     .replace('{height}', String(h))
 }
 
+// we love jank in this household :3
+function isLive(vod: VodWithCreator) {
+  return vod.thumbnail.includes('live_user')
+}
+
+export function vodLink(vod: VodWithCreator) {
+  return isLive(vod) ? `https://twitch.tv/${vod.creator.name}` : vod.url
+}
+
 export default function Vod({ vod, i }: { vod: VodWithCreator, i: number }) {
-  const isLive = vod.thumbnail.includes('live_user') // we love jank in this household :3
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     setVisible(true)
   }, [])
 
-  const vodLink = isLive ? `https://twitch.tv/${vod.creator.name}` : vod.url
+  const link = vodLink(vod)
 
   return (
     <div
@@ -69,18 +77,18 @@ export default function Vod({ vod, i }: { vod: VodWithCreator, i: number }) {
       }}
     >
       <a
-        href={vodLink}
+        href={link}
         className='absolute inset-0'
       />
       <div
         className='relative grow-0 bg-contain bg-no-repeat rounded-md min-w-[160px] min-h-[90px] sm:min-w-[224px] sm:min-h-[126px] pointer-events-none'
         style={{ backgroundImage: `url(${substituteThumbnail(vod.thumbnail, 224, 126)})`}}
       >
-        <LiveMarker live={isLive} className='absolute top-2 left-2' />
+        <LiveMarker live={isLive(vod)} className='absolute top-2 left-2' />
       </div>
       <div className='flex flex-col justify-between min-w-0 grow p-1 sm:p-2'>
         <a
-          href={vodLink}
+          href={link}
           title={vod.title}
           className='z-10'
           tabIndex={-1}
@@ -97,7 +105,7 @@ export default function Vod({ vod, i }: { vod: VodWithCreator, i: number }) {
         <div className='flex flex-row justify-between items-end gap-2 w-full text-sm sm:text-lg'>
           <a
             className='cursor-pointer z-10'
-            href={vodLink}
+            href={link}
             title={timestampIso(vod.timestamp)}
             tabIndex={-1}
           >
@@ -105,7 +113,7 @@ export default function Vod({ vod, i }: { vod: VodWithCreator, i: number }) {
               {formatDuration(vod.duration)}
             </p>
             <p className='text-neutral-300'>
-              {isLive ? 'now!' : timestampRelative(vod.timestamp, vod.duration)}
+              {isLive(vod) ? 'now!' : timestampRelative(vod.timestamp, vod.duration)}
             </p>
           </a>
           <VodAttribution vod={vod} />
