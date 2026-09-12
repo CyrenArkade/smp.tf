@@ -8,7 +8,7 @@ export default function VodList({ vods }: { vods: VodWithCreator[] }) {
 
   useEffect(() => {
     function handleKeydown(e: KeyboardEvent) {
-      if (document.activeElement?.tagName == 'input' || vods.length == 0)
+      if (document.activeElement?.tagName == 'INPUT' || vods.length == 0)
         return
 
       let direction
@@ -29,7 +29,7 @@ export default function VodList({ vods }: { vods: VodWithCreator[] }) {
   useEffect(() => {
     if (focusIndex == undefined)
       return
-    (document.querySelector(`a[href="${vodLink(vods[focusIndex])}"]`) as HTMLElement).focus()
+    (document.querySelector(`a[href="${vodLink(vods[focusIndex])}"]`) as HTMLElement | undefined)?.focus()
   }, [focusIndex])
 
   return (
