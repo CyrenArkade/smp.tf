@@ -5,9 +5,9 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "bun run --bun vite",
+    "dev": "bun run --env-file=.env --bun vite",
     "build": "bun run --bun vite build",
-    "preview": "bun run --bun vite preview",
+    "preview": "bun run --env-file=.env --bun vite preview",
     "seed": "bun run scripts/seed.ts",
     "server": "bun run src/server/main.ts"
   },

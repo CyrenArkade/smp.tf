@@ -33,7 +33,20 @@ jobs:
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: "/srv/smp.tf"
           EXCLUDE: "/.git/, /node_modules/, .env, db.sqlite"
-          SCRIPT_BEFORE: sudo /usr/bin/systemctl stop smp.tf.service
+          SCRIPT_BEFORE: |
+            echo Stopping smp.tf.service
+            sudo /usr/bin/systemctl stop smp.tf.service
           SCRIPT_AFTER: |
             echo $RSYNC_STDOUT
+
+            cd /srv/smp.tf
+            if [[ $RSYNC_STDOUT == *src/db/schema.ts* ]]; then
+              echo Schema changed, resetting db
+              bun run seed --reset
+            elif [[ $RSYNC_STDOUT == *scripts/seed.ts* ]]; then
+              echo Seed script changed, reseeding db
+              bun run seed
+            fi
+
+            echo Restarting smp.tf.service
             sudo /usr/bin/systemctl start smp.tf.service

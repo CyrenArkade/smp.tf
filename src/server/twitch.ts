@@ -11,7 +11,7 @@ export const twitch = new ApiClient({
   authProvider: new AppTokenAuthProvider(twitchClientId, twitchClientSecret)
 })
 
-async function update_creator(creator: sch.Creator) {
+async function update_creator(creator: sch.Creator, online: boolean) {
   if (!creator.twitchId)
     return
 
@@ -20,7 +20,7 @@ async function update_creator(creator: sch.Creator) {
     .set({ live: Boolean(stream) })
     .where(eq(sch.creator.id, creator.id))
 
-  const latest_tracked_vod = await db.query
+  const latestTrackedVod = await db.query
     .vod
     .findFirst({
       orderBy: t => sql`${t.timestamp} desc`,
@@ -32,7 +32,7 @@ async function update_creator(creator: sch.Creator) {
   for await (const vod of twitch.videos.getVideosByUserPaginated(creator.twitchId)) {
     if (vod.type != 'archive')
       continue
-    if (latest_tracked_vod && (latest_tracked_vod.timestamp.getTime() - 24 * 3600 * 1000) > vod.creationDate.getTime())
+    if (latestTrackedVod && (latestTrackedVod.timestamp.getTime() - 24 * 3600 * 1000) > vod.creationDate.getTime())
       break
 
     const liveVod = vod.streamId == stream?.id
@@ -45,7 +45,7 @@ async function update_creator(creator: sch.Creator) {
         duration: vod.durationInSeconds,
         url: vod.url,
         creator_id: creator.id,
-        flight: vod.title.toLowerCase().includes('flight'),
+        flight: vod.title.toLowerCase().includes('flight') || (liveVod && online),
       })
       .onConflictDoUpdate({
         target: sch.vod.id,
@@ -58,13 +58,11 @@ async function update_creator(creator: sch.Creator) {
   }
 }
 
-let lastUpdate = new Date()
-export async function updateTwitch() {
-  console.log(`${new Date}: (${((new Date().getTime() - lastUpdate.getTime()) / 1000).toFixed(2)}s)`)
-  lastUpdate = new Date()
-
+export async function updateTwitch(onlinePlayers: string[]) {
   const creators = await db.select().from(sch.creator);
-  for (const creator of creators)
-    await update_creator(creator);
+
+  await Promise.all(creators.map(creator =>
+    update_creator(creator, onlinePlayers.includes(creator.minecraftName))
+  ))
 }
 

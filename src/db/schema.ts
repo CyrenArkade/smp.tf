@@ -4,6 +4,7 @@ import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 export const creator = sqliteTable('creator', {
   id: int().primaryKey({ autoIncrement: true }),
   name: text().notNull().unique(),
+  minecraftName: text().notNull().unique(),
   twitchId: text(),
   live: int({ mode: 'boolean' }).notNull(),
 })
