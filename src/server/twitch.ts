@@ -43,6 +43,7 @@ async function update_creator(creator: sch.Creator, online: boolean) {
         thumbnail: liveVod ? stream!.thumbnailUrl : vod.thumbnailUrl,
         timestamp: vod.creationDate,
         duration: vod.durationInSeconds,
+        live: liveVod,
         url: vod.url,
         creator_id: creator.id,
         flight: vod.title.toLowerCase().includes('flight') || (liveVod && online),
@@ -50,7 +51,7 @@ async function update_creator(creator: sch.Creator, online: boolean) {
       .onConflictDoUpdate({
         target: sch.vod.id,
         set: {
-          ...updateCols(sch.vod, ['thumbnail', 'duration']),
+          ...updateCols(sch.vod, ['thumbnail', 'duration', 'live']),
           title: liveVod ? stream!.title : sql.raw(`excluded.${sch.vod.title.name}`),
           flight: sql.raw(`flight OR excluded.${sch.vod.flight.name}`),
         }

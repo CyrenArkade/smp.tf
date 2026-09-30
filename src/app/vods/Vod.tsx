@@ -59,13 +59,8 @@ function substituteThumbnail(thumbnail: string, w: number, h: number): string {
     .replace('{height}', String(h))
 }
 
-// we love jank in this household :3
-function isLive(vod: VodWithCreator) {
-  return vod.thumbnail.includes('live_user')
-}
-
 export function vodLink(vod: VodWithCreator, time: number | undefined) {
-  if (isLive(vod) && !time)
+  if (vod.live && !time)
     return `https://twitch.tv/${vod.creator.name}`
   else if (!time)
     return vod.url
@@ -106,7 +101,7 @@ export default function Vod({ vod, i, syncTime }: { vod: VodWithCreator, i: numb
         className='relative grow-0 bg-contain bg-no-repeat rounded-md min-w-[160px] min-h-[90px] sm:min-w-[224px] sm:min-h-[126px] pointer-events-none'
         style={{ backgroundImage: `url(${substituteThumbnail(vod.thumbnail, 224, 126)})`}}
       >
-        <LiveMarker live={isLive(vod)} className='absolute top-2 left-2' />
+        <LiveMarker live={vod.live} className='absolute top-2 left-2' />
       </div>
       <div className='flex flex-col justify-between min-w-0 grow p-1 sm:p-2'>
         <a
@@ -135,7 +130,7 @@ export default function Vod({ vod, i, syncTime }: { vod: VodWithCreator, i: numb
               {formatDuration(vod.duration)}
             </p>
             <p className='text-neutral-300'>
-              {isLive(vod) ? 'now!' : timestampRelative(vod.timestamp, vod.duration)}
+              {vod.live ? 'now!' : timestampRelative(vod.timestamp, vod.duration)}
             </p>
           </a>
           <VodAttribution vod={vod} />

@@ -17,8 +17,9 @@ export const vod = sqliteTable('vod', {
   thumbnail: text().notNull(),
   timestamp: int({ mode: 'timestamp' }).notNull(),
   duration: int().notNull(),
+  live: int({ mode: 'boolean' }).notNull(),
   url: text().notNull(),
-  flight: int({ mode: 'boolean' }),
+  flight: int({ mode: 'boolean' }).notNull(),
 })
 export type Vod = typeof vod.$inferSelect
 

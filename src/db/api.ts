@@ -1,4 +1,4 @@
-import { and, desc, eq, getColumns, sql } from "drizzle-orm";
+import { and, desc, eq, getColumns, gt, sql } from "drizzle-orm";
 import db from "./db";
 import * as sch from "@/db/schema";
 
@@ -21,7 +21,11 @@ export async function fetchVods(filter?: VodFilter): Promise<{ vods: VodWithCrea
   return {
     syncTime: syncTime,
     vods: await db.query.vod.findMany({
-      orderBy: t => sql`${t.timestamp} + ${t.duration} desc`,
+      orderBy: t => sql`
+        CASE WHEN ${t.live} THEN 1 ELSE 0 END DESC,
+        CASE WHEN ${t.live} THEN ${t.timestamp} END DESC,
+        CASE WHEN NOT ${t.live} THEN ${t.timestamp} + ${t.duration} END DESC
+      `,
       with: {
         creator: true,
       },
@@ -43,7 +47,8 @@ export async function fetchCreators() {
     .from(sch.creator)
     .leftJoin(sch.vod, and(
       eq(sch.vod.creator_id, sch.creator.id),
-      eq(sch.vod.flight, true)
+      eq(sch.vod.flight, true),
+      gt(sch.vod.timestamp, new Date(new Date().getTime() - 60*24*60*60*1000)), // last 60 days
     ))
     .groupBy(sch.creator.id)
     .orderBy(
