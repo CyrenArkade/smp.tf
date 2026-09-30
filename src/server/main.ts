@@ -3,6 +3,14 @@ import rscEntry from "@/../dist/rsc/index.js";
 import { updateTwitch } from "./twitch";
 import { fetchPlayerList } from "./mc";
 
+if (process.env.NODE_ENV == 'production') {
+  const server = Bun.serve({
+    port: 3000,
+    fetch: rscEntry.fetch,
+  })
+  console.log('Listening on port', server.port)
+}
+
 async function update() {
   process.stdout.write('Updating...')
   const startTime = new Date()
@@ -14,14 +22,5 @@ async function update() {
 }
 
 setInterval(update, 60 * 1000)
-
-if (process.env.NODE_ENV == 'production') {
-  const server = Bun.serve({
-    port: 3000,
-    fetch: rscEntry.fetch,
-  })
-  console.log('Listening on port', server.port)
-}
-
 await update()
 
