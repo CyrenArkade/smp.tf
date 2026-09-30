@@ -57,6 +57,7 @@ const creators = [
   { name: "Ghostiefruit", twitchName: "ghostiefruit", minecraftName: "ghostiefruit" },
   { name: "acho", twitchName: "acho", minecraftName: "acho" },
   { name: "raerevord", twitchName: "raerevord", minecraftName: "raerevord" },
+  { name: "ZombieCleo", twitchName: "zombiecleo", minecraftName: "ZombieCleo" },
 ]
 
 for (const creator of creators) {
