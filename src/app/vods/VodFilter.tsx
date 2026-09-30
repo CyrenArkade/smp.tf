@@ -1,8 +1,8 @@
 'use client'
 import { useContext } from "react";
-import { FavoriteContext } from "../utils/Favorites";
-import FilterGroup from "../utils/FilterGroup";
-import { parsePathType } from "../utils/routing";
+import { FavoriteContext } from "@/app/utils/Favorites";
+import FilterGroup from "@/app/utils/FilterGroup";
+import { parsePathType } from "@/app/utils/routing";
 
 export default function VodFilter({ url: string_url }: { url: string }) {
   const url = new URL(string_url)
@@ -22,7 +22,7 @@ export default function VodFilter({ url: string_url }: { url: string }) {
               params: { creators: Array.from(favorites).join(',') }
             },
           ]}
-          defaultParams={{ creators: undefined }}
+          keepParams={['content']}
           selected={pathType == 'one' ? undefined : pathType}
           className='mx-auto'
         />
@@ -33,13 +33,13 @@ export default function VodFilter({ url: string_url }: { url: string }) {
           options={[
             {
               label: 'flight only',
-              params: { content: undefined },
             },
             {
               label: 'all',
               params: { content: 'all' },
             },
           ]}
+          keepParams={['creators']}
           selected={url.searchParams.has('content') ? 'all' : 'flight only'}
           className='mx-auto'
         />

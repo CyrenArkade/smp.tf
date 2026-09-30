@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
-import type { VodWithCreator } from "../App";
-import LiveMarker from "../utils/LiveMarker";
+import type { VodWithCreator } from "@/db/api.ts";
+import LiveMarker from "@/app/utils/LiveMarker";
 import VodAttribution from "./VodAttribution";
 import { clsx } from "clsx";
 
@@ -45,13 +45,10 @@ function useVodTimestamps(vod: VodWithCreator): string | undefined {
 }
 
 function formatDuration(duration: number): string {
+  const date = new Date(duration * 1000)
   const pad = (n: number) => ('0' + n).slice(-2);
 
-  const s = duration % 60
-  const m = Math.floor(duration / 60) % 60
-  const h = Math.floor(duration / 3600)
-
-  return `${h}:${pad(m)}:${pad(s)}`
+  return `${date.getUTCHours()}:${pad(date.getUTCMinutes())}:${pad(date.getUTCSeconds())}`
 }
 
 function substituteThumbnail(thumbnail: string, w: number, h: number): string {
@@ -67,11 +64,18 @@ function isLive(vod: VodWithCreator) {
   return vod.thumbnail.includes('live_user')
 }
 
-export function vodLink(vod: VodWithCreator) {
-  return isLive(vod) ? `https://twitch.tv/${vod.creator.name}` : vod.url
+export function vodLink(vod: VodWithCreator, time: number | undefined) {
+  if (isLive(vod) && !time)
+    return `https://twitch.tv/${vod.creator.name}`
+  else if (!time)
+    return vod.url
+  else {
+    const date = new Date(time * 1000 - vod.timestamp.getTime())
+    return `${vod.url}?t=${date.getUTCHours()}h${date.getUTCMinutes()}m${date.getUTCSeconds()}s`
+  }
 }
 
-export default function Vod({ vod, i }: { vod: VodWithCreator, i: number }) {
+export default function Vod({ vod, i, syncTime }: { vod: VodWithCreator, i: number, syncTime: number | undefined }) {
   const [visible, setVisible] = useState(false)
   const vodTimestamps = useVodTimestamps(vod)
 
@@ -79,7 +83,7 @@ export default function Vod({ vod, i }: { vod: VodWithCreator, i: number }) {
     setVisible(true)
   }, [])
 
-  const link = vodLink(vod)
+  const link = vodLink(vod, syncTime)
 
   return (
     <div
@@ -95,6 +99,9 @@ export default function Vod({ vod, i }: { vod: VodWithCreator, i: number }) {
         href={link}
         className='absolute inset-0'
       />
+      {syncTime &&
+        <span className='absolute inset-0 bg-white/5 rounded-l-xl h-full pointer-events-none' style={{ width: `${(syncTime - vod.timestamp.getTime() / 1000) / vod.duration * 100}%` }} />
+      }
       <div
         className='relative grow-0 bg-contain bg-no-repeat rounded-md min-w-[160px] min-h-[90px] sm:min-w-[224px] sm:min-h-[126px] pointer-events-none'
         style={{ backgroundImage: `url(${substituteThumbnail(vod.thumbnail, 224, 126)})`}}

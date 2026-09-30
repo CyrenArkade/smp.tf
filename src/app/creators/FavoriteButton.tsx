@@ -2,7 +2,7 @@
 import Favorite from "@/app/assets/favorite.svg?react";
 import FavoriteFilled from "@/app/assets/favorite-filled.svg?react";
 import { useContext } from "react";
-import { FavoriteContext } from "../utils/Favorites";
+import { FavoriteContext } from "@/app/utils/Favorites";
 import type { Creator } from "@/db/schema";
 import { clsx } from "clsx";
 

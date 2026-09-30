@@ -1,19 +1,19 @@
 'use client'
 import { clsx } from "clsx";
 import { useEffect, useRef, useState } from "react";
-import Link from "./Link";
+import Link from "@/app/utils/Link";
 
 type FilterGroupProps = {
   options: {
     label: string,
     pathname?: string,
-    params?: Record<string, string | undefined>,
+    params?: Record<string, string>,
   }[],
-  defaultParams?: Record<string, string | undefined>,
+  keepParams?: string[],
   selected: string | undefined,
   className?: string,
 }
-export default function FilterGroup({ options, selected: externalSelected, className, defaultParams }: FilterGroupProps) {
+export default function FilterGroup({ options, selected: externalSelected, className, keepParams = [] }: FilterGroupProps) {
   const marker = useRef(null)
   const buttons = useRef<(HTMLAnchorElement | null)[]>([])
   const [selected, setSelected] = useState(externalSelected)
@@ -45,10 +45,8 @@ export default function FilterGroup({ options, selected: externalSelected, class
           key={i}
           ref={e => { buttons.current[i] = e }}
           pathname={option.pathname}
-          params={{
-            ...defaultParams,
-            ...option.params,
-          }}
+          params={option.params}
+          keepParams={keepParams}
           className={'block rounded-full py-1 transition-all px-3 hover:scale-105'}
           onClick={() => setSelected(option.label)}
         >

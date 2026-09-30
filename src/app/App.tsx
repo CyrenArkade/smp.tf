@@ -1,16 +1,13 @@
-import * as sch from "@/db/schema";
-import FavoritesProvider from "./utils/Favorites";
-import VodList from "./vods/VodList";
+import FavoritesProvider from "@/app/utils/Favorites";
+import VodList from "@/app/vods/VodList";
 import Client from "./Client";
 import flightLogo from "@/app/assets/flight-logo.png";
-import CreatorList from "./creators/CreatorList";
-import VodFilter from "./vods/VodFilter";
-import { parsePathType } from "./utils/routing";
+import CreatorList from "@/app/creators/CreatorList";
+import VodFilter from "@/app/vods/VodFilter";
+import { parsePathType } from "@/app/utils/routing";
 import { fetchCreators, fetchVods } from "@/db/api";
 import Git from "@/app/assets/git.svg?react";
-import ListTitle from "./vods/ListTitle";
-
-export type VodWithCreator = sch.Vod & { creator: sch.Creator }
+import ListTitle from "@/app/vods/ListTitle";
 
 export default async function App({ url }: { url: URL }) {
   // parse URL
@@ -25,9 +22,11 @@ export default async function App({ url }: { url: URL }) {
 
   // do fetches
   const allCreators = await fetchCreators()
-  const vods = await fetchVods({
+  const { vods, syncTime } = await fetchVods({
     creators: urlCreators === 'all' ? undefined : urlCreators,
     flight: flightOnly ? true : undefined,
+    vod: url.searchParams.get('vod') ?? undefined,
+    at: Number(url.searchParams.get('at')),
   })
 
   return (
@@ -46,7 +45,7 @@ export default async function App({ url }: { url: URL }) {
               <CreatorList creators={allCreators} />
             </div>
             <ListTitle creators={urlCreators} />
-            <VodList vods={vods} key={'' + urlCreators + flightOnly} />
+            <VodList vods={vods} syncTime={syncTime} key={'' + urlCreators + flightOnly} />
           </div>
         </div>
         <div className='flex flex-row items-center justify-between w-full h-12 bg-black/50 mb-8 rounded-full'>

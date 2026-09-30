@@ -1,9 +1,9 @@
 'use client'
 import Vod, { vodLink } from "./Vod";
-import type { VodWithCreator } from "../App";
+import type { VodWithCreator } from "@/db/api.ts";
 import { useEffect, useState } from "react";
 
-export default function VodList({ vods }: { vods: VodWithCreator[] }) {
+export default function VodList({ vods, syncTime }: { vods: VodWithCreator[], syncTime: number | undefined }) {
   const [focusIndex, setFocusIndex] = useState<number | undefined>(undefined)
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function VodList({ vods }: { vods: VodWithCreator[] }) {
   useEffect(() => {
     if (focusIndex == undefined)
       return
-    (document.querySelector(`a[href="${vodLink(vods[focusIndex])}"]`) as HTMLElement | undefined)?.focus()
+    (document.querySelector(`a[href="${vodLink(vods[focusIndex], syncTime)}"]`) as HTMLElement | undefined)?.focus()
   }, [focusIndex])
 
   return (
@@ -40,7 +40,7 @@ export default function VodList({ vods }: { vods: VodWithCreator[] }) {
           <p className='text-center text-xl'>not even Jibble ;-;</p>
         </div>
         : vods.map((vod, i) =>
-          <Vod key={i} vod={vod} i={i} />
+          <Vod key={i} vod={vod} syncTime={syncTime} i={i} />
         )}
     </div>
   )

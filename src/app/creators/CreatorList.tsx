@@ -1,9 +1,10 @@
 'use client'
 import type { Creator } from "@/db/schema";
-import LiveMarker from "../utils/LiveMarker";
+import LiveMarker from "@/app/utils/LiveMarker";
 import FavoriteButton from "./FavoriteButton";
 import Search from "@/app/assets/search.svg?react";
 import { useEffect, useRef, useState } from "react";
+import Link from "@/app/utils/Link";
 
 export default function CreatorList({ creators }: { creators: Creator[] }) {
   const searchRef = useRef<HTMLInputElement>(null)
@@ -64,9 +65,10 @@ export default function CreatorList({ creators }: { creators: Creator[] }) {
       <h2 className='text-2xl text-center'>creators</h2>
       <hr className='my-2 border-light mx-8' />
       {creators.filter(creatorSearch).map(creator =>
-        <a
+        <Link
           key={creator.id}
-          href={creator.name}
+          pathname={creator.name}
+          keepParams={['content']}
           className='flex flex-row items-center gap-2 p-2 hover:scale-101 hover:bg-black/50 rounded-sm transition-all'
         >
           <img
@@ -77,7 +79,7 @@ export default function CreatorList({ creators }: { creators: Creator[] }) {
           <p className='mr-auto'>{creator.name}</p>
           <LiveMarker live={creator.live} />
           <FavoriteButton creator={creator} />
-        </a>
+        </Link>
       )}
     </div>
   )
