@@ -21,10 +21,10 @@ export async function fetchVods(filter?: VodFilter): Promise<{ vods: VodWithCrea
   return {
     syncTime: syncTime,
     vods: await db.query.vod.findMany({
+      // live (most recent start first) then offline (most recent end first)
       orderBy: t => sql`
         CASE WHEN ${t.live} THEN 1 ELSE 0 END DESC,
-        CASE WHEN ${t.live} THEN ${t.timestamp} END DESC,
-        CASE WHEN NOT ${t.live} THEN ${t.timestamp} + ${t.duration} END DESC
+        CASE WHEN ${t.live} THEN ${t.timestamp} ELSE ${t.timestamp} + ${t.duration} END DESC
       `,
       with: {
         creator: true,
