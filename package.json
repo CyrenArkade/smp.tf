@@ -16,7 +16,6 @@
     "@twurple/api": "^8.1.4",
     "@twurple/auth": "^8.1.4",
     "clsx": "^2.1.1",
-    "dayjs": "^1.11.22",
     "drizzle-orm": "^1.0.0-rc.4",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",

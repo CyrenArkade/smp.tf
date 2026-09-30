@@ -19,15 +19,29 @@ function timestampRelative(timestamp: Date, duration: number): string {
     return Math.floor(Math.max(min, 1)) + 'm ago'
 }
 
-function timestampIso(timestamp: Date): string {
-  const pad = (n: number) => ('0' + n).slice(-2);
+function useVodTimestamps(vod: VodWithCreator): string | undefined {
+  const [title, setTitle] = useState<string | undefined>(undefined)
 
-  return timestamp.getFullYear() + '-' +
-    pad(timestamp.getMonth()+1)  + '-' +
-    pad(timestamp.getDate())     + ' ' +
-    pad(timestamp.getHours())    + ':' +
-    pad(timestamp.getMinutes())  + ':' +
-    pad(timestamp.getSeconds())
+  const pad = (n: number) => ('0' + n).slice(-2)
+
+  function format(timestamp: Date) {
+    return timestamp.getFullYear() + '-' +
+      pad(timestamp.getMonth()+1)  + '-' +
+      pad(timestamp.getDate())     + ' ' +
+      pad(timestamp.getHours())    + ':' +
+      pad(timestamp.getMinutes())  + ':' +
+      pad(timestamp.getSeconds())
+  }
+
+  useEffect(() => {
+    setTitle([
+      format(vod.timestamp),
+      'to',
+      format(new Date(vod.timestamp.getTime() + vod.duration * 1000)),
+    ].join('\n'))
+  }, [])
+
+  return title
 }
 
 function formatDuration(duration: number): string {
@@ -59,6 +73,7 @@ export function vodLink(vod: VodWithCreator) {
 
 export default function Vod({ vod, i }: { vod: VodWithCreator, i: number }) {
   const [visible, setVisible] = useState(false)
+  const vodTimestamps = useVodTimestamps(vod)
 
   useEffect(() => {
     setVisible(true)
@@ -106,7 +121,7 @@ export default function Vod({ vod, i }: { vod: VodWithCreator, i: number }) {
           <a
             className='cursor-pointer z-10'
             href={link}
-            title={timestampIso(vod.timestamp)}
+            title={vodTimestamps}
             tabIndex={-1}
           >
             <p className='text-neutral-300 leading-4 mt-1'>
