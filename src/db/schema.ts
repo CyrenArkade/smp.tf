@@ -7,6 +7,7 @@ export const creator = sqliteTable('creator', {
   minecraftName: text().notNull().unique(),
   twitchId: text(),
   live: int({ mode: 'boolean' }).notNull(),
+  allFlight: int({ mode: 'boolean' }).notNull(),
 })
 export type Creator = typeof creator.$inferSelect
 

@@ -46,7 +46,7 @@ async function update_creator(creator: sch.Creator, online: boolean) {
         live: liveVod,
         url: vod.url,
         creator_id: creator.id,
-        flight: vod.title.toLowerCase().includes('flight') || (liveVod && online),
+        flight: vod.title.toLowerCase().includes('flight') || (liveVod && online) || creator.allFlight,
       })
       .onConflictDoUpdate({
         target: sch.vod.id,

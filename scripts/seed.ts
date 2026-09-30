@@ -58,6 +58,7 @@ const creators = [
   { name: "acho", twitchName: "acho", minecraftName: "acho" },
   { name: "raerevord", twitchName: "raerevord", minecraftName: "raerevord" },
   { name: "ZombieCleo", twitchName: "zombiecleo", minecraftName: "ZombieCleo" },
+  { name: "MrMadSpy", twitchName: "MrMadSpy", minecraftName: "MrMadSpy", allFlight: true }
 ]
 
 for (const creator of creators) {
@@ -71,6 +72,7 @@ for (const creator of creators) {
       twitchId: user.id,
       minecraftName: creator.minecraftName,
       live: false,
+      allFlight: creator.allFlight ?? false,
     })
     .onConflictDoNothing()
 }
