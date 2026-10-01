@@ -45,7 +45,7 @@ export default async function App({ url }: { url: URL }) {
               <CreatorList creators={allCreators} />
             </div>
             <ListTitle creators={urlCreators} />
-            <VodList vods={vods} syncTime={syncTime} key={'' + urlCreators + flightOnly} />
+            <VodList vods={vods} syncTime={syncTime} key={url.toString()} />
           </div>
         </div>
         <div className='flex flex-row items-center justify-between w-full h-12 bg-black/50 mb-8 rounded-full'>
