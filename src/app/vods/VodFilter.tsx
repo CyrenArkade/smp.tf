@@ -41,7 +41,7 @@ export default function VodFilter({ url: string_url }: { url: string }) {
       newUrl.searchParams.delete('at')
     }
 
-    history.pushState(null, '', newUrl.toString())
+    history.pushState(null, '', `${newUrl.pathname}?${newUrl.searchParams}`)
   }
 
   return (
