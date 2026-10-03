@@ -22,15 +22,22 @@ export default function CreatorList({ creators }: { creators: Creator[] }) {
     return () => window.removeEventListener('keydown', handleSlash)
   }, [])
 
-  function creatorSearch(creator: Creator) {
-    return creator.name.toLowerCase().includes(search.toLowerCase())
+  function filteredCreators() {
+    return creators
+      .toSorted((c1, c2) =>
+        Number(c2.name.toLowerCase().startsWith(search.toLowerCase())) -
+        Number(c1.name.toLowerCase().startsWith(search.toLowerCase()))
+      )
+      .filter(creator =>
+        creator.name.toLowerCase().includes(search.toLowerCase())
+      )
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key == 'Escape')
       e.currentTarget.blur()
     else if (e.key == 'Enter') {
-      const creator = creators.find(creatorSearch)
+      const creator = filteredCreators()[0]
       if (creator) {
         history.pushState(null, '', `${creator.name}`)
         e.currentTarget.blur()
@@ -64,7 +71,7 @@ export default function CreatorList({ creators }: { creators: Creator[] }) {
       </div>
       <h2 className='text-2xl text-center'>creators</h2>
       <hr className='my-2 border-light mx-8' />
-      {creators.filter(creatorSearch).map(creator =>
+      {filteredCreators().map(creator =>
         <Link
           key={creator.id}
           pathname={creator.name}
