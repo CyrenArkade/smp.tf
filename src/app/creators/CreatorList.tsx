@@ -55,7 +55,8 @@ export default function CreatorList({ creators }: { creators: Creator[] }) {
           placeholder='Search'
           onChange={e => setSearch(e.target.value)}
           onKeyDown={handleKeyDown}
-          onFocus={(e) => e.target.select()}
+          onFocus={e => e.target.select()}
+          onBlur={() => setSearch('')}
         />
         <Search
           className='absolute h-full w-8 top-0 left-0 p-1 cursor-pointer transition-all not-group-focus-within:hover:bg-white/20 rounded-full'

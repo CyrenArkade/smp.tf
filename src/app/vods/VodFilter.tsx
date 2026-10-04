@@ -13,6 +13,18 @@ export default function VodFilter({ url: string_url }: { url: string }) {
   const timeFilterRef = useRef<HTMLInputElement>(null)
   const [timeFilter, setTimeFilter] = useState('')
 
+  function timeFilterTutorial() {
+    window.alert([
+      'To get a vod link, use Settings > Copy Video URL in the player:',
+      'https://www.twitch.tv/videos/2889869749?t=1h23m53s',
+      '',
+      'To select a time, click the calendar icon.',
+      '',
+      'Alternatively, use this bookmarklet while on a vod:',
+      'https://github.com/CyrenArkade/smp.tf/blob/main/scripts/sync.js',
+    ].join('\n'))
+  }
+
   function applyTimeFilter(filter?: string) {
     filter ??= timeFilter
 
@@ -30,15 +42,22 @@ export default function VodFilter({ url: string_url }: { url: string }) {
         ?.slice(1)                                        // get [hr, min, sec]
         .reduce((acc, x) => acc * 60 + Number(x ?? 0), 0) // compute sec + 60 * (min + 60 * (hr))
 
-      if (!vod || !at)
+      if (!vod)
         return
+      else if (!at) {
+        timeFilterTutorial()
+        return
+      }
 
       newUrl.searchParams.set('vod', vod)
       newUrl.searchParams.set('at', at.toString())
     }
-    else {
+    else if (!timeFilter) {
       newUrl.searchParams.delete('vod')
       newUrl.searchParams.delete('at')
+    }
+    else {
+      timeFilterTutorial()
     }
 
     history.pushState(null, '', `${newUrl.pathname}?${newUrl.searchParams}`)
