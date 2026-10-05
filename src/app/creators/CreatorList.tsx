@@ -37,10 +37,15 @@ export default function CreatorList({ creators }: { creators: Creator[] }) {
     if (e.key == 'Escape')
       e.currentTarget.blur()
     else if (e.key == 'Enter') {
-      const creator = filteredCreators()[0]
-      if (creator) {
-        history.pushState(null, '', `${creator.name}`)
-        e.currentTarget.blur()
+      if (search) {
+        const creator = filteredCreators()[0]
+        if (creator) {
+          history.pushState(null, '', `${creator.name}`)
+          e.currentTarget.blur()
+        }
+      }
+      else {
+        history.pushState(null, '', '/')
       }
     }
   }
