@@ -37,16 +37,11 @@ export default function CreatorList({ creators }: { creators: Creator[] }) {
     if (e.key == 'Escape')
       e.currentTarget.blur()
     else if (e.key == 'Enter') {
-      if (search) {
-        const creator = filteredCreators()[0]
-        if (creator) {
-          history.pushState(null, '', `${creator.name}`)
-          e.currentTarget.blur()
-        }
-      }
-      else {
-        history.pushState(null, '', '/')
-      }
+      const pathname = search ? filteredCreators()[0]?.name : '/'
+      if (!pathname)
+        return
+      history.pushState(null, '', pathname)
+      e.currentTarget.blur()
     }
   }
 
