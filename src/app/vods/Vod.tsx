@@ -48,7 +48,7 @@ function formatDuration(duration: number): string {
   const date = new Date(duration * 1000)
   const pad = (n: number) => ('0' + n).slice(-2);
 
-  return `${date.getUTCHours()}:${pad(date.getUTCMinutes())}:${pad(date.getUTCSeconds())}`
+  return `${(date.getUTCDate() - 1) * 24 + date.getUTCHours()}:${pad(date.getUTCMinutes())}:${pad(date.getUTCSeconds())}`
 }
 
 function substituteThumbnail(thumbnail: string, w: number, h: number): string {
