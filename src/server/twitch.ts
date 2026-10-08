@@ -35,24 +35,27 @@ async function update_creator(creator: sch.Creator, online: boolean) {
     if (latestTrackedVod && (latestTrackedVod.timestamp.getTime() - 24 * 3600 * 1000) > vod.creationDate.getTime())
       break
 
-    const liveVod = vod.streamId == stream?.id
+    const isLive = stream != null && vod.streamId == stream?.id
     await db.insert(sch.vod)
       .values({
         id: vod.id,
-        title: vod.title,
-        thumbnail: liveVod ? stream!.thumbnailUrl : vod.thumbnailUrl,
+        title: (isLive ? stream : vod).title,
+        thumbnail: (isLive ? stream : vod).thumbnailUrl,
         timestamp: vod.creationDate,
         duration: vod.durationInSeconds,
-        live: liveVod,
+        live: isLive,
         url: vod.url,
         creator_id: creator.id,
-        flight: vod.title.toLowerCase().includes('flight') || (liveVod && online) || creator.allFlight,
+        flight:
+          (isLive ? stream : vod).title.toLowerCase().includes('flight')
+          || (isLive && online)
+          || creator.allFlight,
       })
       .onConflictDoUpdate({
         target: sch.vod.id,
         set: {
           ...updateCols(sch.vod, ['thumbnail', 'duration', 'live']),
-          title: liveVod ? stream!.title : sql.raw(`excluded.${sch.vod.title.name}`),
+          title: isLive ? stream!.title : sql.raw(`excluded.${sch.vod.title.name}`),
           flight: sql.raw(`flight OR excluded.${sch.vod.flight.name}`),
         }
       })
